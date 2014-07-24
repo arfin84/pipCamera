@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:background="#666666" >
+
+        <Button
+            android:id="@+id/del"
+            android:layout_width="60px"
+            android:layout_height="60px"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/del" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/preview"
+        android:layout_width="480px"
+        android:layout_height="640px" >
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="124px"
+        android:background="#666666" >
+
+        <Button
+            android:id="@+id/takepic"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_capture" />
+
+        <ImageButton
+            android:id="@+id/showbef"
+            android:layout_width="120px"
+            android:layout_height="100px"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/touming" />
+
+        <Button
+            android:id="@+id/savepic"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:layout_alignBaseline="@+id/button2"
+            android:layout_alignBottom="@+id/button2"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/save" />
+
+    </RelativeLayout>
+
+</LinearLayout>
