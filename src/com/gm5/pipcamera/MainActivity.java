@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -31,8 +32,11 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	private static int wscreen;
-	private static int hscreen;
+	private static int wscreen=480;
+	private static int hscreen=640;
+	
+	PicView myview;
+	PicView myview2;
 	
 	private Camera mCamera;
 	private CameraPreview mPreview;
@@ -67,6 +71,16 @@ public class MainActivity extends Activity {
 		preview = (FrameLayout)findViewById(R.id.preview);
 		
 		preview.addView(mPreview);
+		
+		myview = new PicView(this,hscreen,wscreen);
+		myview2 = new PicView(this,hscreen,wscreen);
+		Bitmap bmp1 = BitmapFactory.decodeResource(getResources(),
+				R.drawable.touming);
+   //     Bitmap bmp1 = BitmapFactory.decodeFile("/sdcard/1.png");
+		myview.setUpBmp(bmp1);
+		preview.addView(myview);
+		preview.bringChildToFront(myview);
+		
 		
 		Button takepic = (Button)findViewById(R.id.takepic);
 		takepic.setOnClickListener(new View.OnClickListener() {
@@ -145,18 +159,39 @@ public class MainActivity extends Activity {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			Log.d("son", "trying to save pic");
 			// TODO Auto-generated method stub
-		     File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE); 
-		        if (pictureFile == null){ 
-		            return; 
-		        }
+//		     File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE); 
+//		        if (pictureFile == null){ 
+//		            return; 
+//		        }
+			checkDirexist();
+			File pictureFile = new File("/sdcard/Pictures/PipCamera/tmppic.jpg");
+			if(pictureFile != null){
+				pictureFile.delete();
+			}
+			
 		        try { 
 		        	
 		            FileOutputStream fos = new FileOutputStream(pictureFile); 
 		            Log.d("son", "save picfile");
 		            fos.write(data); 
 		            fos.close(); 
-		            mPreview.startPreview();
+		            
 			        lastpicpath = pictureFile.getAbsolutePath();
+		            
+		            Bitmap bmp1 = BitmapFactory.decodeFile(lastpicpath);
+		            myview.savepic();
+		            Bitmap bmp2 = BitmapFactory.decodeFile("/sdcard/Pictures/PipCamera/tmp.jpg");
+		            myview2.setUpBmp2(bmp1, bmp2, wscreen, hscreen);
+		            myview2.savepic();// save the comp pic
+		            Bitmap bmp3 = BitmapFactory.decodeFile("/sdcard/Pictures/PipCamera/tmp.jpg");
+		            myview.setUpBmp(bmp3);
+		            preview.removeView(myview);
+		            
+		            mPreview.startPreview();
+			        preview.addView(myview);
+			        preview.bringChildToFront(myview);
+			        
+
 			        updateOpenPicImgBtn(lastpicpath);
 		        } catch (FileNotFoundException e) { 
 		        } catch (IOException e) { 
@@ -186,6 +221,17 @@ public class MainActivity extends Activity {
 		ImageButton showbef = (ImageButton)findViewById(R.id.showbef);
 		showbef.setImageBitmap(bm);
 	}
+	
+	private void checkDirexist(){
+		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory( 
+	              Environment.DIRECTORY_PICTURES), "PipCamera");
+	    if (! mediaStorageDir.exists()){ 
+	        if (! mediaStorageDir.mkdirs()){ 
+	  
+	        } 
+	    }    
+	}
+	
 	private File getOutputMediaFile(int type){
 		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory( 
 	              Environment.DIRECTORY_PICTURES), "PipCamera");
@@ -193,8 +239,7 @@ public class MainActivity extends Activity {
 	        if (! mediaStorageDir.mkdirs()){ 
 	            return null; 
 	        } 
-	    } 
-		
+	    }    
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmms").format(new Date());
 		File mediaFile;
 		if(type == MEDIA_TYPE_IMAGE){
@@ -239,5 +284,31 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	@Override
+    protected void onResume() {
+        super.onResume();
+        if(mCamera == null)
+        {
+            mCamera = getCameraInstance();
+            setCameraParams(mCamera);
+            mPreview.setCamera(mCamera);
+            mCamera.startPreview(); 	
+        }
+        
+    }
+	
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releaseCamera();
+    }
+    
+	 private void releaseCamera(){ 
+	        if (mCamera != null){ 
+	            mCamera.release();        // 为其它应用释放摄像头
+	            mCamera = null; 
+	        } 
+	    } 
 
 }
