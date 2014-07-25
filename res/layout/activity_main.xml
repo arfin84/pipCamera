@@ -40,8 +40,13 @@
 
         <ImageButton
             android:id="@+id/showbef"
-            android:layout_width="120px"
-            android:layout_height="100px"
+         	android:layout_width="75px"
+         	android:layout_height="100px"
+         	android:maxHeight="48dp"
+         	android:maxWidth="48dp"
+         	android:minHeight="32dp"
+         	android:minWidth="32dp"
+         	android:scaleType="centerCrop"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@drawable/touming" />
@@ -50,8 +55,8 @@
             android:id="@+id/savepic"
             android:layout_width="100px"
             android:layout_height="100px"
-            android:layout_alignBaseline="@+id/button2"
-            android:layout_alignBottom="@+id/button2"
+            android:layout_alignBaseline="@+id/takepic"
+            android:layout_alignBottom="@+id/takepic"
             android:layout_alignParentRight="true"
             android:background="@drawable/save" />
 

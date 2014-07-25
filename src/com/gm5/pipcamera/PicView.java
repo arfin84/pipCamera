@@ -97,10 +97,10 @@ public class PicView extends View {
 	       }
 	       
 	       
-	       public void savepic(){
+	       public void savepic(String path){
 	           OutputStream os=null;
 			try {
-				os = new FileOutputStream("/sdcard/Pictures/pipCamera/tmp.jpg");
+				os = new FileOutputStream(path);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -38,6 +38,9 @@ public class MainActivity extends Activity {
 	PicView myview;
 	PicView myview2;
 	
+	Button takepic;
+	Button savebutton;
+	
 	private Camera mCamera;
 	private CameraPreview mPreview;
 	
@@ -76,13 +79,12 @@ public class MainActivity extends Activity {
 		myview2 = new PicView(this,hscreen,wscreen);
 		Bitmap bmp1 = BitmapFactory.decodeResource(getResources(),
 				R.drawable.touming);
-   //     Bitmap bmp1 = BitmapFactory.decodeFile("/sdcard/1.png");
 		myview.setUpBmp(bmp1);
 		preview.addView(myview);
 		preview.bringChildToFront(myview);
 		
 		
-		Button takepic = (Button)findViewById(R.id.takepic);
+		takepic = (Button)findViewById(R.id.takepic);
 		takepic.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -95,11 +97,45 @@ public class MainActivity extends Activity {
 		ImageButton showbef = (ImageButton)findViewById(R.id.showbef);
 		showbef.setOnClickListener(new OpenPictureListener());
 		lastpicpath = getLastCaptureFile();
-		if (lastpicpath != "")
-			updateOpenPicImgBtn(lastpicpath);
+		if (lastpicpath != "")	{updateOpenPicImgBtn(lastpicpath);Log.d("son", "lastpath= "+ lastpicpath);}
+		
+		savebutton = (Button)findViewById(R.id.savepic);
+		savebutton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Log.d("son", "check save button seccuss");
+				savePic();
+			}
+		});
+		
+		Button delbutton = (Button)findViewById(R.id.del);
+		delbutton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Bitmap touming = BitmapFactory.decodeResource(getResources(),
+						R.drawable.touming);
+				preview.removeView(myview);
+				myview.setUpBmp(touming);
+				preview.addView(myview);
+			}
+		});
 		
 	}//end-oncreate
 
+	
+	void savePic() {
+		File picFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+		if (picFile == null) {
+			return;
+		}
+		myview.savepic(picFile.getPath());
+		Toast.makeText(this, "savepic.name :" + picFile.getName(), Toast.LENGTH_LONG).show();
+		lastpicpath = picFile.getAbsolutePath();
+		updateOpenPicImgBtn(lastpicpath);
+		//takepic.setClickable(true);
+	}
 	
     // 读取保存目录中最新的图像文件
     String getLastCaptureFile()
@@ -149,6 +185,7 @@ public class MainActivity extends Activity {
 			public void onAutoFocus(boolean arg0, Camera arg1) {
 				// TODO Auto-generated method stub
 				Log.d("son", "takepic");
+			//	takepic.setClickable(false);
 				mCamera.takePicture(null, null, mPicture);
 			}
 		});
@@ -159,12 +196,14 @@ public class MainActivity extends Activity {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			Log.d("son", "trying to save pic");
 			// TODO Auto-generated method stub
-//		     File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE); 
-//		        if (pictureFile == null){ 
-//		            return; 
-//		        }
-			checkDirexist();
-			File pictureFile = new File("/sdcard/Pictures/PipCamera/tmppic.jpg");
+			File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory( 
+		              Environment.DIRECTORY_PICTURES), "PipCamera");
+		    if (! mediaStorageDir.exists()){ 
+		        if (! mediaStorageDir.mkdirs()){ 
+		  
+		        } 
+		    }    
+			File pictureFile = new File(mediaStorageDir.getPath()+File.separator+"Cameratmp.png");
 			if(pictureFile != null){
 				pictureFile.delete();
 			}
@@ -179,11 +218,11 @@ public class MainActivity extends Activity {
 			        lastpicpath = pictureFile.getAbsolutePath();
 		            
 		            Bitmap bmp1 = BitmapFactory.decodeFile(lastpicpath);
-		            myview.savepic();
-		            Bitmap bmp2 = BitmapFactory.decodeFile("/sdcard/Pictures/PipCamera/tmp.jpg");
+		            myview.savepic("/sdcard/Pictures/PipCamera/.viewtmp.png");
+		            Bitmap bmp2 = BitmapFactory.decodeFile("/sdcard/Pictures/PipCamera/.viewtmp.png");
 		            myview2.setUpBmp2(bmp1, bmp2, wscreen, hscreen);
-		            myview2.savepic();// save the comp pic
-		            Bitmap bmp3 = BitmapFactory.decodeFile("/sdcard/Pictures/PipCamera/tmp.jpg");
+		            myview2.savepic("/sdcard/Pictures/PipCamera/.finalcanvas.png");// save the comp pic
+		            Bitmap bmp3 = BitmapFactory.decodeFile("/sdcard/Pictures/PipCamera/.finalcanvas.png");
 		            myview.setUpBmp(bmp3);
 		            preview.removeView(myview);
 		            
@@ -192,7 +231,7 @@ public class MainActivity extends Activity {
 			        preview.bringChildToFront(myview);
 			        
 
-			        updateOpenPicImgBtn(lastpicpath);
+			     //   updateOpenPicImgBtn(lastpicpath);
 		        } catch (FileNotFoundException e) { 
 		        } catch (IOException e) { 
 		        } 

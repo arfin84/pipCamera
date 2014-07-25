@@ -32,8 +32,7 @@ public final class R {
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f080000;
-        public static final int action_settings=0x7f080007;
-        public static final int button2=0x7f080006;
+        public static final int action_settings=0x7f080006;
         public static final int del=0x7f080001;
         public static final int preview=0x7f080002;
         public static final int savepic=0x7f080005;
