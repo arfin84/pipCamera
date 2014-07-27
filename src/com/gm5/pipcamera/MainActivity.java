@@ -134,6 +134,13 @@ public class MainActivity extends Activity {
 		Toast.makeText(this, "savepic.name :" + picFile.getName(), Toast.LENGTH_LONG).show();
 		lastpicpath = picFile.getAbsolutePath();
 		updateOpenPicImgBtn(lastpicpath);
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+				R.drawable.touming);
+		preview.removeView(myview);
+		myview.setUpBmp(bmp);
+		preview.addView(myview);
+		mPreview.startPreview();
+		preview.bringChildToFront(myview);
 		//takepic.setClickable(true);
 	}
 	
@@ -190,6 +197,7 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
+	
 	private PictureCallback mPicture = new PictureCallback(){
 
 		@Override
