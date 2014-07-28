@@ -251,7 +251,6 @@ public class MainActivity extends Activity {
 		              Environment.DIRECTORY_PICTURES), "PipCamera");
 		    if (! mediaStorageDir.exists()){ 
 		        if (! mediaStorageDir.mkdirs()){ 
-		  
 		        } 
 		    }    
 			File pictureFile = new File(mediaStorageDir.getPath()+File.separator+".Cameratmp.png");
@@ -264,7 +263,6 @@ public class MainActivity extends Activity {
 					savebutton.setVisibility(View.VISIBLE);
 					takepic.setClickable(false);
 					takepic.setVisibility(View.INVISIBLE);
-					
 		            FileOutputStream fos = new FileOutputStream(pictureFile); 
 		            Log.d("son", "save picfile");
 		            fos.write(data); 
