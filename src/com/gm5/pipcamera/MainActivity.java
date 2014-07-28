@@ -260,11 +260,17 @@ public class MainActivity extends Activity {
 			}
 			
 		        try { 
-		        	
+					savebutton.setClickable(true);
+					savebutton.setVisibility(View.VISIBLE);
+					takepic.setClickable(false);
+					takepic.setVisibility(View.INVISIBLE);
+					
 		            FileOutputStream fos = new FileOutputStream(pictureFile); 
 		            Log.d("son", "save picfile");
 		            fos.write(data); 
 		            fos.close(); 
+			        preview.bringChildToFront(myview);
+
 		            
 			        lastpicpath = pictureFile.getAbsolutePath();
 		            
@@ -279,11 +285,7 @@ public class MainActivity extends Activity {
 		            
 		            mPreview.startPreview();
 			        preview.addView(myview);
-			        preview.bringChildToFront(myview);
-					savebutton.setClickable(true);
-					savebutton.setVisibility(View.VISIBLE);
-					takepic.setClickable(false);
-					takepic.setVisibility(View.INVISIBLE);
+
 
 			     //   updateOpenPicImgBtn(lastpicpath);
 		        } catch (FileNotFoundException e) { 
