@@ -17,8 +17,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.Menu;
@@ -91,6 +93,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				takeFocusedPic();
+
 			}
 		});
 		
@@ -108,6 +111,8 @@ public class MainActivity extends Activity {
 				savePic();
 			}
 		});
+		savebutton.setClickable(false);
+		savebutton.setVisibility(View.INVISIBLE);
 		
 		Button delbutton = (Button)findViewById(R.id.del);
 		delbutton.setOnClickListener(new View.OnClickListener() {
@@ -119,11 +124,41 @@ public class MainActivity extends Activity {
 				preview.removeView(myview);
 				myview.setUpBmp(touming);
 				preview.addView(myview);
+				savebutton.setClickable(false);
+				savebutton.setVisibility(View.INVISIBLE);
+				takepic.setClickable(true);
+				takepic.setVisibility(View.VISIBLE);
 			}
 		});
 		
+		registerBoradcastReceiver();
+		
 	}//end-oncreate
 
+	BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if(action.equals("changebutton")){
+				savebutton.setClickable(false);
+				savebutton.setVisibility(View.INVISIBLE);
+				takepic.setClickable(true);
+				takepic.setVisibility(View.VISIBLE);
+			}
+		}
+		
+	};
+
+
+    public void registerBoradcastReceiver(){  
+        IntentFilter myIntentFilter = new IntentFilter();  
+        myIntentFilter.addAction("changebutton");  
+        //注册广播        
+        registerReceiver(mBroadcastReceiver, myIntentFilter);  
+    }  
+	
+
+	
 	
 	void savePic() {
 		File picFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
@@ -137,9 +172,17 @@ public class MainActivity extends Activity {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.touming);
 		preview.removeView(myview);
+
+		mPreview.startPreview();
+		
+
+		takepic.setClickable(true);
+		takepic.setVisibility(View.VISIBLE);
+		savebutton.setClickable(false);
+		savebutton.setVisibility(View.INVISIBLE);
+		
 		myview.setUpBmp(bmp);
 		preview.addView(myview);
-		mPreview.startPreview();
 		preview.bringChildToFront(myview);
 		//takepic.setClickable(true);
 	}
@@ -211,7 +254,7 @@ public class MainActivity extends Activity {
 		  
 		        } 
 		    }    
-			File pictureFile = new File(mediaStorageDir.getPath()+File.separator+"Cameratmp.png");
+			File pictureFile = new File(mediaStorageDir.getPath()+File.separator+".Cameratmp.png");
 			if(pictureFile != null){
 				pictureFile.delete();
 			}
@@ -237,7 +280,10 @@ public class MainActivity extends Activity {
 		            mPreview.startPreview();
 			        preview.addView(myview);
 			        preview.bringChildToFront(myview);
-			        
+					savebutton.setClickable(true);
+					savebutton.setVisibility(View.VISIBLE);
+					takepic.setClickable(false);
+					takepic.setVisibility(View.INVISIBLE);
 
 			     //   updateOpenPicImgBtn(lastpicpath);
 		        } catch (FileNotFoundException e) { 

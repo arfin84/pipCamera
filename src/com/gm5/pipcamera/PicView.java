@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Bitmap.Config;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -140,18 +142,27 @@ public class PicView extends View {
 	           float y = event.getY();
 	           switch(event.getAction()){
 	           case MotionEvent.ACTION_DOWN:
+	        	   Log.d("son", "action_down");
 	              touch_start(x,y);
 	              invalidate();
 	              break;
 	           case MotionEvent.ACTION_MOVE:
+	        	   Log.d("son", "action_move");
+	        	   sendcastbroad();
 	              touch_move(x,y);
 	              invalidate();
 	              break;
 	           case MotionEvent.ACTION_UP:
+	        	   Log.d("son", "action_up");
 	              touch_up();
 	              invalidate();
 	              break;
 	           }
 	           return true;
+	       }
+	       
+	       void sendcastbroad(){
+	           Intent mIntent = new Intent("changebutton"); 
+	           getContext().sendBroadcast(mIntent); 
 	       }
 }
