@@ -222,11 +222,6 @@ public class MainActivity extends Activity {
 	      return true;  
 	    }  
     } 
-    
-	/** 为保存图片或视频创建文件Uri */ 
-	private  Uri getOutputMediaFileUri(int type){ 
-	      return Uri.fromFile(getOutputMediaFile(type)); 
-	} 
 	
 	private void takeFocusedPic(){
 		mCamera.autoFocus(new Camera.AutoFocusCallback() {
@@ -236,6 +231,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				Log.d("son", "takepic");
 			//	takepic.setClickable(false);
+				takepic.setClickable(false);
 				mCamera.takePicture(null, null, mPicture);
 			}
 		});
@@ -261,7 +257,7 @@ public class MainActivity extends Activity {
 		        try { 
 					savebutton.setClickable(true);
 					savebutton.setVisibility(View.VISIBLE);
-					takepic.setClickable(false);
+
 					takepic.setVisibility(View.INVISIBLE);
 		            FileOutputStream fos = new FileOutputStream(pictureFile); 
 		            Log.d("son", "save picfile");
@@ -301,7 +297,7 @@ public class MainActivity extends Activity {
 		    intent.setDataAndType(Uri.fromFile(file), "image/*");
 		    startActivity(intent);
 		}	
-	};
+	}
 	
 	public void updateOpenPicImgBtn(String path)
 	{
